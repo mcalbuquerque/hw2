@@ -68,19 +68,120 @@
 
 # Delete existing data, so you'll start fresh each time this script is run.
 # Use `Model.destroy_all` code.
-# TODO!
+Movie.destroy_all
+Person.destroy_all
+Role.destroy_all
 
 # Generate models and tables, according to the domain model
-# TODO!
 
-# Insert data into your database that reflects the sample data shown above
+#Insert data into your database that reflects the sample data shown above
 # Do not use hard-coded foreign key IDs.
 # TODO!
+
+
+#Creates Nolan on People Table
+c_n = Person.new
+c_n.name = "Christopher Nolan"
+c_n.save
+
+
+#Creates Movies
+new_movie = Movie.new   
+new_movie.title = "Batman Begins"
+new_movie.year_released = 2005
+new_movie.rated = "PG-13"
+new_movie.person_id = c_n.id
+new_movie.save
+
+new_movie = Movie.new   
+new_movie.title = "The Dark Knight"
+new_movie.year_released = 2008
+new_movie.rated = "PG-13"
+new_movie.person_id = c_n.id
+new_movie.save
+
+new_movie = Movie.new   
+new_movie.title = "The Dark Knight Rises"
+new_movie.year_released = 2012
+new_movie.rated = "PG-13"
+new_movie.person_id = c_n.id
+new_movie.save
+
+#Creates Cast on People table
+
+people = [
+   "Christian Bale",
+   "Michael Caine",
+   "Liam Neeson",
+   "Katie Holmes",
+   "Gary Oldman",
+   "Heath Ledger",
+   "Aaron Eckhart",
+   "Maggie Gyllenhaal",
+   "Tom Hardy",
+   "Joseph Gordon-Levitt",
+   "Anne Hathaway"
+]
+
+for person in people
+   new_person = Person.new
+   new_person.name = person
+   new_person.save
+end
+
+#Creates Roles 
+
+roles = [
+   {movie: "Batman Begins", person: "Christian Bale", character_name: "Bruce Wayne"},
+   {movie: "Batman Begins", person: "Michael Caine", character_name: "Alfred"},
+   {movie: "Batman Begins", person: "Liam Neeson", character_name: "Ra's Al Ghul"},
+   {movie: "Batman Begins", person: "Katie Holmes", character_name: "Rachel Dawes"},
+   {movie: "Batman Begins", person: "Gary Oldman", character_name: "Commissioner Gordon"},
+   {movie: "The Dark Knight", person: "Christian Bale", character_name: "Bruce Wayne"},
+   {movie: "The Dark Knight", person: "Heath Ledger", character_name: "Joker"},
+   {movie: "The Dark Knight", person: "Aaron Eckhart", character_name: "Harvey Dent"},
+   {movie: "The Dark Knight", person: "Michael Caine", character_name: "Alfred"},
+   {movie: "The Dark Knight", person: "Maggie Gyllenhaal", character_name: "Rachel Dawes"},
+   {movie: "The Dark Knight Rises", person: "Christian Bale", character_name: "Bruce Wayne"},
+   {movie: "The Dark Knight Rises", person: "Gary Oldman", character_name: "Commissioner Gordon"},
+   {movie: "The Dark Knight Rises", person: "Tom Hardy", character_name: "Bane"},
+   {movie: "The Dark Knight Rises", person: "Joseph Gordon-Levitt", character_name: "John Blake"},
+   {movie: "The Dark Knight Rises", person: "Anne Hathaway", character_name: "Selina Kyle"}
+]
+
+for role in roles
+   new_role = Role.new
+
+   movie = Movie.where({title: role[:movie]})[0]
+   movie_id = movie.id
+   new_role.movie_id = movie_id
+
+   person = Person.where({name: role[:person]})[0]
+   person_id = person.id
+   new_role.person_id = person_id
+   
+   new_role.character_name = role[:character_name]
+
+   new_role.save
+end
+
+
+
 
 # Prints a header for the movies output
 puts "Movies"
 puts "======"
 puts ""
+
+# Query the movies data and loop through the results to display the movies output
+# TODO!
+
+
+movies = Movie.all
+
+for movie in movies
+   puts "#{movie.title} | #{movie.year_released} | #{movie.rated} | #{movie.person.name}" 
+end
 
 # Query the movies data and loop through the results to display the movies output
 # TODO!
@@ -92,4 +193,10 @@ puts "========"
 puts ""
 
 # Query the cast data and loop through the results to display the cast output for each movie
-# TODO!
+
+roles = Role.all
+
+for role in roles
+   puts "#{role.movie.title} | #{role.person.name} | #{role.character_name}"
+end
+
